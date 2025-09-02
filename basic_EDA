@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+from scipy.sparse import csr_matrix
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+import math
+
+ratings = pd.read_csv(r'C:\Users\Rozalka\Desktop\recommendation\ratings_export.csv')
+movies = pd.read_csv(
+    r'C:\Users\Rozalka\Desktop\recommendation\movie_data.csv',
+    quotechar='"',
+    encoding='utf-8',
+    engine='python'
+)
+users = pd.read_csv(r'C:\Users\Rozalka\Desktop\recommendation\users_export.csv')
+
+#BASIC INFORMATION ABOUT DATA
+print(ratings.head())
+print(movies.head())
+print(users.head())
+
+print("Ratings shape:", ratings.shape)
+print("Movies shape:", movies.shape)
+print("Users shape:", users.shape)
+
+print(ratings.info())
+print(movies.info())
+print(users.info())
+
+# Missing values
+print(ratings.isnull().sum())
+print(movies.isnull().sum())
+print(users.isnull().sum())
