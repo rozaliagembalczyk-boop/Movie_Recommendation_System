@@ -7,14 +7,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 import math
 
-ratings = pd.read_csv(r'C:\Users\Rozalka\Desktop\recommendation\ratings_export.csv')
+ratings = pd.read_csv('ratings_export.csv')
 movies = pd.read_csv(
-    r'C:\Users\Rozalka\Desktop\recommendation\movie_data.csv',
+    'movie_data.csv',
     quotechar='"',
     encoding='utf-8',
     engine='python'
 )
-users = pd.read_csv(r'C:\Users\Rozalka\Desktop\recommendation\users_export.csv')
+users = pd.read_csv('users_export.csv')
 
 #BASIC INFORMATION ABOUT DATA
 print(ratings.head())
