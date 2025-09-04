@@ -25,7 +25,7 @@ movie_stats = movie_stats.merge(movies[["movie_id", "movie_title", "genres"]], o
 popular_movies = movie_stats[movie_stats["num_ratings"] >= 50]
 
 # ASKING USER FOR GENRE
-user_genre = input("Enter a genre (e.g., Action, Comedy, Drama): ").strip()
+user_genre = input("Enter a genre (e.g. Action, Comedy, Drama, Romance, Horror): ").strip()
 
 # FILTERING MOVIES BY GENRE
 genre_movies = popular_movies[popular_movies["genres"].str.contains(user_genre, case=False, na=False)]
