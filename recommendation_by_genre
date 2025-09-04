@@ -1,31 +1,41 @@
 import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
 
+# LOADING DATA
 ratings = pd.read_csv('ratings_export.csv')
 movies = pd.read_csv(
-    movie_data.csv',
+    'movie_data.csv',
     quotechar='"',
     encoding='utf-8',
     engine='python'
 )
 users = pd.read_csv('users_export.csv')
 
+# CLEANING DATA
 ratings = ratings.dropna(subset=['movie_id', 'user_id'])
 movies = movies.dropna(subset=['movie_id', 'movie_title'])
 
-# --- Step 1: Compute average rating & count per movie ---
+# AVERAGE & COUNT PER MOVIE
 movie_stats = ratings.groupby("movie_id")["rating_val"].agg(["mean", "count"]).reset_index()
 movie_stats.rename(columns={"mean": "avg_rating", "count": "num_ratings"}, inplace=True)
 
-# --- Step 2: Merge with movie titles ---
+# MERGING AVERAGE & COUNT WITH MOVIE TITLE
 movie_stats = movie_stats.merge(movies[["movie_id", "movie_title", "genres"]], on="movie_id", how="left")
 
-# --- Step 3: Filter out movies with very few ratings (e.g., < 50) ---
+# SHOWING ONLY MOVIES WITH MORE THAN 50 RATINGS
 popular_movies = movie_stats[movie_stats["num_ratings"] >= 50]
 
-# --- Step 4: Rank movies by average rating first, then number of ratings ---
-top_movies = popular_movies.sort_values(by=["avg_rating", "num_ratings"], ascending=[False, False]).head(10)
+# ASKING USER FOR GENRE
+user_genre = input("Enter a genre (e.g., Action, Comedy, Drama): ").strip()
 
-# --- Step 5: Show results ---
-print("Top 10 Most Popular Movies:")
-print(top_movies[["movie_title", "avg_rating", "num_ratings", "genres"]])
+# FILTERING MOVIES BY GENRE
+genre_movies = popular_movies[popular_movies["genres"].str.contains(user_genre, case=False, na=False)]
+
+# RECOMMENDERS OUTPUT
+if genre_movies.empty:
+    print(f"No movies found in the genre '{user_genre}'. Try another one.")
+else:
+    # Rank by avg_rating, then number of ratings
+    best_movie = genre_movies.sort_values(by=["avg_rating", "num_ratings"], ascending=[False, False]).head(10)
+
+    print(f"Your recommended movies in {user_genre} genre:")
+    print(best_movie[["movie_title", "avg_rating", "num_ratings", "genres"]].to_string(index=False))
